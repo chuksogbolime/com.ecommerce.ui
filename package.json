@@ -5,7 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "test": "ng test",
+    "test": "ng test --watch=false",
     "test-chrome-ui":"ng test --karma-config chrome-ui-karma.conf.js",
     "test-headless":"ng test --watch=false --browsers=ChromeHeadless",
     "lint": "ng lint",
