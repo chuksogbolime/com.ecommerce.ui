@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -11,20 +11,25 @@ import {MatButtonModule} from '@angular/material/button';
 import { HomeComponent } from './home/home.component'
 import { GlobalConstants } from './constants/global-constants';
 
+
 @NgModule({
   declarations: [
-    AppComponent,
     AppHeaderComponent,
-    HomeComponent
+    HomeComponent,
+    AppComponent,
+    
+    
   ],
   imports: [
-    BrowserModule,
     AppRoutingModule,
+    BrowserModule,
     BrowserAnimationsModule,
     MatToolbarModule,
     MatIconModule,
     MatButtonModule
+    
   ],
+  schemas:[CUSTOM_ELEMENTS_SCHEMA],
   providers: [GlobalConstants],
   bootstrap: [AppComponent]
 })

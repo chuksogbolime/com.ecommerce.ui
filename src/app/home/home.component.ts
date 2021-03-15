@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { GlobalConstants } from '../constants/global-constants';
-
+//import {MatIcon} from '@angular/material/icon'
 
 @Component({
   selector: 'app-home',
