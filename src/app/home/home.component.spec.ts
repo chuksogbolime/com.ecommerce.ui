@@ -1,15 +1,32 @@
+import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { of } from 'rxjs';
+import { AppHeaderComponent } from '../app-header/app-header.component';
 import { GlobalConstants } from '../constants/global-constants';
 
 import { HomeComponent } from './home.component';
 
+class MatIconStub{
+  open(){
+    return {
+      onAction: () => of({})
+    }
+  }
+
+}
 describe('HomeComponent', () => {
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HomeComponent ]
+      declarations: [ HomeComponent, AppHeaderComponent ],
+      imports:[MatIconModule],
+      providers:[
+        {provide: MatIcon, useClass: MatIconStub},
+      ],
+      schemas:[NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA]
     })
     .compileComponents();
   });

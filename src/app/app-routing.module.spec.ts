@@ -1,7 +1,10 @@
 import { Location } from "@angular/common";
+import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { fakeAsync, inject, TestBed, tick } from "@angular/core/testing";
+import { MatIcon } from "@angular/material/icon";
 import { Route, Router } from "@angular/router";
 import { RouterTestingModule } from "@angular/router/testing";
+import { AppHeaderComponent } from "./app-header/app-header.component";
 import { routes } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { HomeComponent } from "./home/home.component";
@@ -20,11 +23,13 @@ describe('Router: App', () => {
           imports: [RouterTestingModule.withRoutes(routes)],
           declarations: [
             HomeComponent,
+            AppHeaderComponent,
             AppComponent
           ],
           providers:[
-            Location
-          ]
+            Location, MatIcon
+          ],
+          schemas:[CUSTOM_ELEMENTS_SCHEMA]
         });
     
         router = TestBed.inject(Router);
