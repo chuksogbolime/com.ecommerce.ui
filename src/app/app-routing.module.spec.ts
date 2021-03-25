@@ -1,12 +1,17 @@
 import { Location } from "@angular/common";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { fakeAsync, inject, TestBed, tick } from "@angular/core/testing";
-import { MatIcon } from "@angular/material/icon";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { Route, Router } from "@angular/router";
 import { RouterTestingModule } from "@angular/router/testing";
+import { AngularMaterialModule } from "./angular-material/angular-material.module";
 import { AppHeaderComponent } from "./app-header/app-header.component";
 import { routes } from "./app-routing.module";
 import { AppComponent } from "./app.component";
+import { CustomerFormComponent } from "./customer-form/customer-form.component";
+import { CustomerListComponent } from "./customer-list/customer-list.component";
+import { CustomerComponent } from "./customer/customer.component";
 import { HomeComponent } from "./home/home.component";
 
 
@@ -20,14 +25,18 @@ describe('Router: App', () => {
     beforeEach(() => {
         
         TestBed.configureTestingModule({
-          imports: [RouterTestingModule.withRoutes(routes)],
+          imports: [RouterTestingModule.withRoutes(routes), HttpClientTestingModule,AngularMaterialModule],
           declarations: [
             HomeComponent,
             AppHeaderComponent,
+            CustomerListComponent,
+            CustomerComponent,
+            CustomerFormComponent,
             AppComponent
           ],
           providers:[
-            Location, MatIcon
+            Location, AngularMaterialModule,
+            MatSnackBar
           ],
           schemas:[CUSTOM_ELEMENTS_SCHEMA]
         });
@@ -49,6 +58,23 @@ describe('Router: App', () => {
         router.navigate(['home']);
         tick()
         expect(location.path()).toBe('/home'); 
+      }));
+      it('navigate to "/customer" redirects you to /customer/view', fakeAsync(() => { 
+        router.navigate(['customer']);
+        tick()
+        expect(location.path()).toBe('/customer/view'); 
+      }));
+
+      it('navigate to "/create" redirects you to /customer/create', fakeAsync(() => { 
+        router.navigate(['customer/create']);
+        tick()
+        expect(location.path()).toBe('/customer/create'); 
+      }));
+
+      it('navigate to "/view" redirects you to /customer/view', fakeAsync(() => { 
+        router.navigate(['customer/view']);
+        tick()
+        expect(location.path()).toBe('/customer/view'); 
       }));
 
       xit('non existing routes should redirects you to /home', fakeAsync(() => { 

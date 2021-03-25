@@ -1,0 +1,22 @@
+table {
+    width: 100%;
+  }
+  
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+  
+  td, th {
+    width: 15%;
+  }
+  .action-td-th{
+    width: 5%;
+  }
+
+  .container{
+    padding:2%;
+  }
+  .filter-full-width {
+    width: 100%;
+  }

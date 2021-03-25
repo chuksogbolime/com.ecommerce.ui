@@ -2,6 +2,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { of } from 'rxjs';
+import { AngularMaterialModule } from '../angular-material/angular-material.module';
 import { AppHeaderComponent } from '../app-header/app-header.component';
 import { GlobalConstants } from '../constants/global-constants';
 
@@ -22,7 +23,7 @@ describe('HomeComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ HomeComponent, AppHeaderComponent ],
-      imports:[MatIconModule],
+      imports:[AngularMaterialModule],
       providers:[
         {provide: MatIcon, useClass: MatIconStub},
       ],

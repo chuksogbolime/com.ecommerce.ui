@@ -4,6 +4,7 @@ import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatToolbar, MatToolbarModule } from '@angular/material/toolbar';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
+import { AngularMaterialModule } from '../angular-material/angular-material.module';
 import { GlobalConstants } from '../constants/global-constants';
 
 import { AppHeaderComponent } from './app-header.component';
@@ -25,7 +26,7 @@ describe('AppHeaderComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ AppHeaderComponent ],
-      imports:[MatIconModule, MatToolbarModule,
+      imports:[AngularMaterialModule,
       RouterTestingModule],
       providers:[
         {provide: MatIcon, useClass: MatIconStub},
