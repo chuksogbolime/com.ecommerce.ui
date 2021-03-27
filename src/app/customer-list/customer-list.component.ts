@@ -88,12 +88,14 @@ export class CustomerListComponent implements OnInit, AfterViewInit {
   confirmDelete() {
     let dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       disableClose: false
+
     });
     
     dialogRef.componentInstance.confirmMessage = GlobalConstants.customerDeleteConfirmationMessage
-    console.log(dialogRef)
+    //console.log(dialogRef)
     dialogRef.afterClosed().subscribe(result => {
       if(result) {
+        //console.log(result)
         // do confirmation actions
         
         //console.log(dialogRef)

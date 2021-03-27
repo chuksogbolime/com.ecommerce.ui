@@ -1,30 +1,28 @@
 import { Location } from '@angular/common';
-import { HttpClient, HttpClientModule, HttpResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ChangeDetectorRef, CUSTOM_ELEMENTS_SCHEMA, DebugElement } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, DebugElement, Injector } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { AngularMaterialModule } from '../angular-material/angular-material.module';
 import { Customer, MockCustomer } from '../models/customer';
 import { CustomerService } from '../services/customer.service';
 import { throwError } from 'rxjs';
 
 import { CustomerListComponent } from './customer-list.component';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
-import { MatDialog, MatDialogContainer, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
-import { OverlayRef } from '@angular/cdk/overlay';
 
 export class MatDialogMock {
   open() {
    return {
-     afterClosed: () => of(ConfigClass.matDialogAfterCloseValue)
+     //afterClosed: () => of(ConfigClass.matDialogAfterCloseValue)
+     afterClosed: () => of(true)
    };
  }
 }
@@ -36,7 +34,7 @@ export class MatDialogMockWithFalseAfterClose {
  }
 }
 export class ConfigClass{
-  public static matDialogAfterCloseValue:boolean=true;
+  public static matDialogAfterCloseValue:boolean=false;
 }
 describe('CustomerListComponent', () => {
   let component: CustomerListComponent;
@@ -49,10 +47,8 @@ describe('CustomerListComponent', () => {
   let customerService:CustomerService
   let MockCustomerService = jasmine.createSpyObj('CustomerService', ['get']);
   let serviceSpy:any
-  let http:any
   let httpResponse:any
   let snackBarSpy = {open: jasmine.createSpy('open')};
-  let MockMatDialogSpy = jasmine.createSpyObj('MatDialog', ['open']);
   let matDialog:MatDialog
   let matDialogSwitchAfterCloseValue=true
  
@@ -60,7 +56,7 @@ describe('CustomerListComponent', () => {
   beforeEach(async () => {
     
     await TestBed.configureTestingModule({
-      declarations: [ CustomerListComponent ],
+      declarations: [ CustomerListComponent, ConfirmationDialogComponent ],
       imports:[RouterTestingModule, AngularMaterialModule, 
         BrowserAnimationsModule, HttpClientTestingModule],
       providers:[
@@ -68,20 +64,21 @@ describe('CustomerListComponent', () => {
         { provide: Router, useValue: routerSpy },
         {provider:CustomerService, useValue:MockCustomerService},
         { provide: MatSnackBar, useValue: snackBarSpy },
-        {provider:MatDialog, useClass:MatDialogMock}
-        /*{provider:MatDialog, useFactory: ()=>{
+        //{provider:MatDialog, useClass:MatDialogMock}
+        {provider:MatDialog, useFactory: ()=>{
           if(matDialogSwitchAfterCloseValue){
             return new MatDialogMock()
           }
           else{
             return new MatDialogMockWithFalseAfterClose()
           }
-        }}*/
+        }}
 
       ],
       schemas:[CUSTOM_ELEMENTS_SCHEMA]
     })
     .compileComponents();
+    
   });
 
   beforeEach(() => {
@@ -222,11 +219,11 @@ describe('CustomerListComponent', () => {
     expect(serviceSpy.calls.any()).toBe(true);
   }))
 
-  it('confirmDelete() should open confirmation dialog',()=>{
+  xit('confirmDelete() should open confirmation dialog',()=>{
     
     //let dialogRef = new MatDialogRef<ConfirmationDialogComponent>(OverlayRef.prototype,MatDialogContainer.prototype)
     //matDialog.disableClose=false
-    spyOn(matDialog, 'open').and.callThrough()
+    spyOn(matDialog, 'open')//.and.callThrough()
     component.confirmDelete()
     
     //fixture.detectChanges()
@@ -239,25 +236,95 @@ describe('CustomerListComponent', () => {
     })
     //spyOn(matDialog, 'afterClose').and.callThrough()
   })
-  it('confirmDelete() should open confirmation dialog but set afterclose to null',()=>{
+
+
+  
+  it('confirmDelete() should open confirmation dialog',()=>{
+    let dialogSpy: jasmine.Spy;
+    let dialogRefSpyObj = jasmine.createSpyObj({ afterClosed : of({}), close: null });
+    dialogRefSpyObj.componentInstance = { body: '' }; // attach componentInstance to the spy object...
+    dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue(dialogRefSpyObj);
+    component.confirmDelete()
+
+    expect(dialogSpy).toHaveBeenCalled();
+    expect(dialogSpy).toHaveBeenCalledWith(ConfirmationDialogComponent,{ disableClose: false });
+
+    expect(dialogRefSpyObj.afterClosed).toHaveBeenCalled();
+  })
+
+  it('confirmDelete() should open confirmation dialog with afterclose to be false',()=>{
+    let dialogSpy: jasmine.Spy;
+    let dialogRefSpyObj = jasmine.createSpyObj({ afterClosed : of(false), close: null });
+    dialogRefSpyObj.componentInstance = { body: '' }; // attach componentInstance to the spy object...
+    dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue(dialogRefSpyObj);
+    component.confirmDelete()
+
+    expect(dialogSpy).toHaveBeenCalled();
+    expect(dialogSpy).toHaveBeenCalledWith(ConfirmationDialogComponent,{ disableClose: false });
+
+    expect(dialogRefSpyObj.afterClosed).toHaveBeenCalled();
+  })
+
+  xit('confirmDelete() should open confirmation dialog',()=>{
+    
+    /*
+    serviceSpy = spyOn(customerService, 'get').and.returnValue(of(httpResponse))
+    component.ngOnInit()
+    tick()
+    fixture.detectChanges()
+    expect(component.customers.length>0).toBeTruthy()
+    */
+   matDialog = TestBed.inject(MatDialog)
+    spyOn(matDialog, 'open').and.callThrough
+    
+    //const deleteButtonEL = fixture.debugElement.query(By.css('#deleteCustomer'));
+    //expect(deleteButtonEL).not.toBeNull()
+    //deleteButtonEL.triggerEventHandler('click', null);
+
+    component.confirmDelete()
+    //tick()
+    fixture.detectChanges()
+    //expect(matDialog.open).toHaveBeenCalled();
+
+
+    //matDialog.closeAll()
+    //fixture.detectChanges()
+    //matDialog.afterAllClosed.subscribe(r=>{
+      //expect(r).not.toBeNull()
+      
+    //})
+    
+    //fixture.detectChanges()
+    //const closeDialogButtonEL = fixture.debugElement.query(By.css('#dialogClose'));
+    //closeDialogButtonEL.triggerEventHandler('click', null);
+    //fixture.detectChanges()
+    /*const i = Injector.create([{provide: MatDialog, useClass: MatDialogMockWithFalseAfterClose}]);
+    matDialog=TestBed.inject(MatDialog)
+    deleteButtonEL.triggerEventHandler('click', null);
+    expect(matDialog.open).toHaveBeenCalled();*/
+    
+    
+  })
+  xit('confirmDelete() should open confirmation dialog but set afterclose to be false',()=>{
     
     //let dialogRef = new MatDialogRef<ConfirmationDialogComponent>(OverlayRef.prototype,MatDialogContainer.prototype)
-    ConfigClass.matDialogAfterCloseValue=false
-    fixture.detectChanges()
-    //console.log(matDialog)
-    spyOn(matDialog, 'open').and.callThrough()
+    //const i = Injector.create([{provide: MatDialog, useClass: MatDialogMockWithFalseAfterClose}]);
+    //matDialog=TestBed.inject(MatDialog)
+
+    //fixture.detectChanges()
+    spyOn(matDialog, 'open')//.and.callThrough
     component.confirmDelete()
     
     //fixture.detectChanges()
     expect(matDialog.open).toHaveBeenCalled();
-    matDialog.closeAll()
+    //matDialog.closeAll()
     
-    fixture.detectChanges()
+    //fixture.detectChanges()
   
-    matDialog.afterAllClosed.subscribe(r=>{
+    /*matDialog.afterAllClosed.subscribe(r=>{
       expect(r).toBeNull()
 
-    })
+    })*/
     //spyOn(matDialog, 'afterClose').and.callThrough()
   })
 });
