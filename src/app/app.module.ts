@@ -5,18 +5,30 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppHeaderComponent } from './app-header/app-header.component';
-import {MatToolbarModule} from '@angular/material/toolbar'
-import {MatIconModule} from '@angular/material/icon'
-import {MatButtonModule} from '@angular/material/button';
+
 import { HomeComponent } from './home/home.component'
 import { GlobalConstants } from './constants/global-constants';
+import { CustomerListComponent } from './customer-list/customer-list.component';
 
+import { CustomerFormComponent } from './customer-form/customer-form.component'
+
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CustomerComponent } from './customer/customer.component';
+import { AngularMaterialModule } from './angular-material/angular-material.module';
+import { HttpClientModule } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
+ 
 
 @NgModule({
   declarations: [
     AppHeaderComponent,
     HomeComponent,
     AppComponent,
+    CustomerListComponent,
+    CustomerFormComponent,
+    CustomerComponent,
+    ConfirmationDialogComponent,
     
     
   ],
@@ -24,13 +36,16 @@ import { GlobalConstants } from './constants/global-constants';
     AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatButtonModule
+    AngularMaterialModule,
+
+    FormsModule,
+    ReactiveFormsModule,
+    HttpClientModule
     
   ],
   schemas:[CUSTOM_ELEMENTS_SCHEMA],
-  providers: [GlobalConstants],
+  providers: [GlobalConstants,
+  MatSnackBar],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

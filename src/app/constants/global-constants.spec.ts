@@ -11,4 +11,14 @@ describe('GlobalConstants', () => {
     expect(actual).toBe("Ecommerce App")
   });
 
+  it('base api route for customer should be http://localhost:8080/api/customer', ()=>{
+    let actual = GlobalConstants.customerBaseAPIUrl;
+    expect(actual).toBe("http://localhost:8080/api/customer")
+  })
+
+  it('customer delete confirmation message should be Are you sure you want to delete this customer?', ()=>{
+    let actual = GlobalConstants.customerDeleteConfirmationMessage;
+    expect(actual).toBe("Are you sure you want to delete this customer?")
+  })
+
 });

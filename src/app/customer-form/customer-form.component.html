@@ -1,0 +1,50 @@
+<div class="container" *ngIf='loading' style="text-align: right; margin-top: 150px !important; margin-left: 410px !important;"> 
+    <mat-spinner></mat-spinner>
+  </div>
+<div class="container" *ngIf='!loading'>
+   
+    <mat-card >
+        <mat-card-title>Create a new customer</mat-card-title>
+        <div class="card-container">
+            <div>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Enter First Name</mat-label>
+                    <input matInput placeholder="" [formControl] = 'name'>
+                    <mat-error *ngIf="name.invalid">First Name is required</mat-error>
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-form-field appearance="outline" class="">
+                    <mat-label>Enter Last Name</mat-label>
+                    <input matInput placeholder="" [formControl] = 'lastName'>
+                    <mat-error *ngIf="lastName.invalid">Last Name is required</mat-error>
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-form-field appearance="outline" class="small-width">
+                    <mat-label>House No</mat-label>
+                    <input matInput placeholder="" type="number" [formControl] = 'houseNo'>
+                    <mat-error *ngIf="houseNo.invalid">required</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="mid-width">
+                    <mat-label>Enter Street Name</mat-label>
+                    <input matInput placeholder="" [formControl] = 'street'>
+                    <mat-error *ngIf="street.invalid">Street Name is required</mat-error>
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Phone Number</mat-label>
+                    <input matInput placeholder="" [formControl] = 'phone'>
+                    <mat-error *ngIf="phone.invalid">Phone is required</mat-error>
+                </mat-form-field>
+            </div>
+
+            
+            <button mat-flat-button color="primary" (click)='create()'>Create</button>
+            <button mat-flat-button color="ascent" (click)='gotoView()'>Cancel</button>
+        </div>
+       
+    </mat-card>
+</div>
+
