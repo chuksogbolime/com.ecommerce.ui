@@ -108,4 +108,34 @@ describe('CustomerService', () => {
       expect(req.request.method).toEqual('POST');
       req.flush(null, { status: 400, statusText: 'Bad Request' });
   })
+
+  it('delete() should retuen status code 200 and an empty response body', ()=>{
+    let id=1;
+    service.delete(id).subscribe((response) => {
+      expect(response.status).toBe(200)
+      let responseBody = response.body==null?null:response.body;
+      expect(responseBody).toBeNull()
+      
+      });
+
+      const req = httpTestingController.expectOne(`${GlobalConstants.customerBaseAPIUrl}/${id}`);
+      
+      expect(req.request.method).toEqual('DELETE');
+      req.flush(null, { status: 200, statusText: 'Ok' });
+  })
+
+  it('delete() should retuen status code 204 and an empty response body', ()=>{
+    let id=1;
+    service.delete(id).subscribe((response) => {
+      expect(response.status).toBe(204)
+      let responseBody = response.body==null?null:response.body;
+      expect(responseBody).toBeNull()
+      
+      });
+
+      const req = httpTestingController.expectOne(`${GlobalConstants.customerBaseAPIUrl}/${id}`);
+      
+      expect(req.request.method).toEqual('DELETE');
+      req.flush(null, { status: 204, statusText: 'Not Found' });
+  })
 });

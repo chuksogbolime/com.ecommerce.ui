@@ -22,4 +22,9 @@ export class CustomerService {
     return this.http.post<Customer>(url, customer,{observe: 'response' })
   }
 
+  delete(id:number):Observable<HttpResponse<any>>{
+    let url = `${GlobalConstants.customerBaseAPIUrl}/${id}`;
+    return this.http.delete<Customer>(url,{observe: 'response' })
+  }
+
 }
