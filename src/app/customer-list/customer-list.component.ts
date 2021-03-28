@@ -37,6 +37,10 @@ export class CustomerListComponent implements OnInit, AfterViewInit {
   gotoCreate(){
     this.router.navigate(['customer/create'])
   }
+  gotoEdit(id: number) {
+    //this.router.navigate(["customer/edit/", { id: id }]);
+    this.router.navigate([`customer/edit/${id}`]);
+  }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;

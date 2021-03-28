@@ -77,6 +77,12 @@ describe('Router: App', () => {
         expect(location.path()).toBe('/customer/view'); 
       }));
 
+      it('navigate to "/edit" redirects you to /customer/edit/id', fakeAsync(() => { 
+        router.navigate(['customer/edit/1']);
+        tick()
+        expect(location.path()).toBe('/customer/edit/1'); 
+      }));
+
       xit('non existing routes should redirects you to /home', fakeAsync(() => { 
         router.navigate(['abcd']);
         tick()

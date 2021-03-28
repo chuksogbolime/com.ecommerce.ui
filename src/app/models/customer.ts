@@ -11,7 +11,7 @@ export class Customer{
    ){}
 
 }
-
+export const EmptyCustomer:Customer = new Customer('','','','','',-1);
 export const MockCustomer:Customer[]=[
     new Customer("Jone", "Doe", "Henry frame street", "20", "01234555", 1),
     new Customer("Paul", "Sprin", "Smith Coal street", "2", "09876544", 2),

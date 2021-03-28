@@ -27,4 +27,9 @@ export class CustomerService {
     return this.http.delete<Customer>(url,{observe: 'response' })
   }
 
+  getById(id:Number):Observable<HttpResponse<Customer>>{
+    let url = `${GlobalConstants.customerBaseAPIUrl}/${id}`;
+    return this.http.get<Customer>(url,{observe: 'response' })
+  }
+
 }

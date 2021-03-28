@@ -18,6 +18,8 @@ import { AngularMaterialModule } from './angular-material/angular-material.modul
 import { HttpClientModule } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
+import { CustomerFormEditComponent } from './customer-form-edit/customer-form-edit.component';
+import { UtilityService } from './shared/util';
  
 
 @NgModule({
@@ -29,6 +31,7 @@ import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-
     CustomerFormComponent,
     CustomerComponent,
     ConfirmationDialogComponent,
+    CustomerFormEditComponent,
     
     
   ],
@@ -45,7 +48,7 @@ import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-
   ],
   schemas:[CUSTOM_ELEMENTS_SCHEMA],
   providers: [GlobalConstants,
-  MatSnackBar],
+  MatSnackBar, UtilityService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
