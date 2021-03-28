@@ -224,7 +224,7 @@ describe('CustomerListComponent', () => {
     //let dialogRef = new MatDialogRef<ConfirmationDialogComponent>(OverlayRef.prototype,MatDialogContainer.prototype)
     //matDialog.disableClose=false
     spyOn(matDialog, 'open')//.and.callThrough()
-    component.confirmDelete()
+    component.confirmDelete(1)
     
     //fixture.detectChanges()
     expect(matDialog.open).toHaveBeenCalled();
@@ -244,12 +244,17 @@ describe('CustomerListComponent', () => {
     let dialogRefSpyObj = jasmine.createSpyObj({ afterClosed : of({}), close: null });
     dialogRefSpyObj.componentInstance = { body: '' }; // attach componentInstance to the spy object...
     dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue(dialogRefSpyObj);
-    component.confirmDelete()
+    let id = 1;
+    component.confirmDelete(id)
 
     expect(dialogSpy).toHaveBeenCalled();
     expect(dialogSpy).toHaveBeenCalledWith(ConfirmationDialogComponent,{ disableClose: false });
 
     expect(dialogRefSpyObj.afterClosed).toHaveBeenCalled();
+
+    serviceSpy = spyOn(customerService, 'delete').and.returnValue(of(new HttpResponse({body:null, status:200})))
+    spyOn(customerService, 'get').and.returnValue(of(httpResponse))
+    expect(component.deleteCustomer(id)).toHaveBeenCalled
   })
 
   it('confirmDelete() should open confirmation dialog with afterclose to be false',()=>{
@@ -257,7 +262,7 @@ describe('CustomerListComponent', () => {
     let dialogRefSpyObj = jasmine.createSpyObj({ afterClosed : of(false), close: null });
     dialogRefSpyObj.componentInstance = { body: '' }; // attach componentInstance to the spy object...
     dialogSpy = spyOn(TestBed.inject(MatDialog), 'open').and.returnValue(dialogRefSpyObj);
-    component.confirmDelete()
+    component.confirmDelete(1)
 
     expect(dialogSpy).toHaveBeenCalled();
     expect(dialogSpy).toHaveBeenCalledWith(ConfirmationDialogComponent,{ disableClose: false });
@@ -281,7 +286,7 @@ describe('CustomerListComponent', () => {
     //expect(deleteButtonEL).not.toBeNull()
     //deleteButtonEL.triggerEventHandler('click', null);
 
-    component.confirmDelete()
+    component.confirmDelete(1)
     //tick()
     fixture.detectChanges()
     //expect(matDialog.open).toHaveBeenCalled();
@@ -313,7 +318,7 @@ describe('CustomerListComponent', () => {
 
     //fixture.detectChanges()
     spyOn(matDialog, 'open')//.and.callThrough
-    component.confirmDelete()
+    component.confirmDelete(1)
     
     //fixture.detectChanges()
     expect(matDialog.open).toHaveBeenCalled();
@@ -327,4 +332,33 @@ describe('CustomerListComponent', () => {
     })*/
     //spyOn(matDialog, 'afterClose').and.callThrough()
   })
+
+  it('deleteCustomer() should call delete() in CustomerService and return status 200 with null body', fakeAsync(()=>{
+    
+    serviceSpy = spyOn(customerService, 'delete').and.returnValue(of(new HttpResponse({body:null, status:200})))
+    spyOn(customerService, 'get').and.returnValue(of(httpResponse))
+    component.deleteCustomer(1)
+    tick()
+    expect(serviceSpy.calls.any()).toBe(true);
+    
+    
+    expect(component.ngOnInit()).toHaveBeenCalled
+  }))
+
+  it('deleteCustomer() should call delete() in CustomerService and return status 304 with null body', fakeAsync(()=>{
+    
+    serviceSpy = spyOn(customerService, 'delete').and.returnValue(of(new HttpResponse({body:null, status:304, statusText:'Not Modified'})))
+    spyOn(customerService, 'get').and.returnValue(of(httpResponse))
+    component.deleteCustomer(1)
+    tick()
+    expect(serviceSpy.calls.any()).toBe(true);
+  }))
+
+  it('deleteCustomer() should throw error on http status 500', fakeAsync(()=>{
+   
+    serviceSpy = spyOn(customerService, 'delete').and.returnValue(throwError({status: 500}))
+    component.deleteCustomer(1)
+    tick()
+    expect(serviceSpy.calls.any()).toBe(true);
+  }))
 });

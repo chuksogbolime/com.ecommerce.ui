@@ -85,7 +85,8 @@ export class CustomerListComponent implements OnInit, AfterViewInit {
     });
   }
 
-  confirmDelete() {
+  confirmDelete(id:number) {
+    //console.log(id)
     let dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       disableClose: false
 
@@ -97,12 +98,30 @@ export class CustomerListComponent implements OnInit, AfterViewInit {
       if(result) {
         //console.log(result)
         // do confirmation actions
-        
+        this.deleteCustomer(id)
         //console.log(dialogRef)
         //console.log('Deleted')
       }
       //dialogRef = null;
     });
+  }
+
+  deleteCustomer(id:number){
+    this.loading=true
+    this.customerService.delete(id).subscribe(response=>{
+      this.loading=false
+      //console.log('called customerService')
+      if(response.status==200){
+        this.ngOnInit()
+      }
+      else{
+        //show snack bar
+        this.openSnackBar(response.statusText)
+      }
+    },(err)=>{
+      this.loading=false;
+      this.openSnackBar(`${ResponseDescription.FailedResponse}`)
+    })
   }
 
   ngOnInit(): void {

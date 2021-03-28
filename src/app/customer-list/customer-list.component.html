@@ -62,7 +62,7 @@
           <ng-container matColumnDef="Delete">
             <th mat-header-cell *matHeaderCellDef mat-sort-header class = "action-td-th"> </th>
             <td mat-cell *matCellDef="let row" class = "action-td-th">
-              <button id='deleteCustomer' mat-stroked-button  color="warn" (click)='confirmDelete()'>
+              <button id='deleteCustomer' mat-stroked-button  color="warn" (click)='confirmDelete(row.id)'>
                 Delete </button>
             </td>
           </ng-container>
