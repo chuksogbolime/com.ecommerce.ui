@@ -124,6 +124,10 @@ describe('CustomerListComponent', () => {
     component.gotoCreate()
     expect(routerSpy.navigate).toHaveBeenCalledWith(['customer/create']); 
   }))
+  it('gotoEdit should redirect to /customer/edit/{id}', fakeAsync(() => {
+    component.gotoEdit(1)
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['customer/edit/1']); 
+  }))
   it('initialize paginator and sort', ()=>{
     component.ngAfterViewInit()
     expect(component.dataSource.paginator).toEqual(component.paginator)

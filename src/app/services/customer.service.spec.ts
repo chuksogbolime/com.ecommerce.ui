@@ -138,4 +138,34 @@ describe('CustomerService', () => {
       expect(req.request.method).toEqual('DELETE');
       req.flush(null, { status: 204, statusText: 'Not Found' });
   })
+
+  it('getById(), should return 200 with a customer object as body', ()=>{
+    const testData: Customer = MockCustomer[0]
+    
+    service.getById(testData.id).subscribe((response) => {
+        expect(response.status).toBe(200);
+        let responseBody = response.body == null ? null : response.body;
+        expect(responseBody).toEqual(testData );
+      
+      });
+
+      const req = httpTestingController.expectOne(`${GlobalConstants.customerBaseAPIUrl}/${testData.id}`);
+      expect(req.request.method).toEqual('GET');
+      req.flush(testData,{ status: 200, statusText: 'Found' });
+      //httpTestingController.verify();
+  })
+  it('getById() should retuen status code 204 and an empty response body', ()=>{
+    let id=1;
+    service.getById(id).subscribe((response) => {
+      expect(response.status).toBe(204)
+      let responseBody = response.body==null?null:response.body;
+      expect(responseBody).toBeNull()
+      
+      });
+
+      const req = httpTestingController.expectOne(`${GlobalConstants.customerBaseAPIUrl}/${id}`);
+      
+      expect(req.request.method).toEqual('GET');
+      req.flush(null, { status: 204, statusText: 'Not Found' });
+  })
 });
