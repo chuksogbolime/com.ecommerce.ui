@@ -4,6 +4,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -129,6 +130,59 @@ describe('CustomerFormComponent', () => {
     expect(component.openSnackBar).toHaveBeenCalled;
     expect(serviceSpy.calls.any()).toBe(true);
   }))
+
+  it('customer form controls has expected validators',()=>{
+    component.InitForm()
+    component.name.setValue('')
+    component.lastName.setValue('')
+    component.houseNo.setValue('')
+    component.street.setValue('')
+    component.phone.setValue('')
+    let nameErr = component.name.errors || {}
+    let lastNameErr = component.lastName.errors || {}
+    let houseNoErr = component.houseNo.errors || {}
+    let streetErr = component.street.errors || {}
+    let phoneErr = component.phone.errors || {}
+
+    expect(nameErr['required']).toBeTruthy()
+    expect(lastNameErr['required']).toBeTruthy()
+    expect(houseNoErr['required']).toBeTruthy()
+    expect(streetErr['required']).toBeTruthy()
+    expect(phoneErr['required']).toBeTruthy()
+  })
+  it('initFormGroup() should initialize customer form by calling InitForm()',()=>{
+    spyOn(component, 'InitForm')
+    component.initFormGroup()
+    
+    expect(component.InitForm).toHaveBeenCalled()
+  })
+  it('InitForm() should initialize form controls with customer data',()=>{
+    component.InitForm()
+    expect(component.name.value).toBe('')
+    expect(component.lastName.value).toBe('')
+    expect(component.houseNo.value).toBe('')
+    expect(component.street.value).toBe('')
+    expect(component.phone.value).toBe('')
+  })
+  it('create button should call create() in component',()=>{
+    spyOn(component, 'create')
+    component.loading=false;
+    fixture.detectChanges()
+    const updateButtonEL = fixture.debugElement.query(By.css('#createCustomer'));
+    expect(updateButtonEL).not.toBeNull()
+    updateButtonEL.triggerEventHandler('click', null);
+    expect(component.create).toHaveBeenCalled()
+  })
+  it('cancel button should call gotoView() in component',()=>{
+    spyOn(component, 'gotoView')
+    component.loading=false;
+    fixture.detectChanges()
+    const cancelButtonEL = fixture.debugElement.query(By.css('#cancelCreate'));
+    expect(cancelButtonEL).not.toBeNull()
+    //expect(cancelButtonEL.nativeElement.value).toBe('Cancel')
+    cancelButtonEL.triggerEventHandler('click', null);
+    expect(component.gotoView).toHaveBeenCalled()
+  })
 });
 function TestInvalidCustomerForm(component: CustomerFormComponent) {
   component.houseNo.setValue('');

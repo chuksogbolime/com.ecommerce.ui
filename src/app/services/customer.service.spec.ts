@@ -4,7 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 
 import { CustomerService } from './customer.service';
-import { Customer, MockCustomer } from '../models/customer';
+import { Customer, EmptyCustomer, MockCustomer } from '../models/customer';
 import { GlobalConstants } from '../constants/global-constants';
 
 describe('CustomerService', () => {
@@ -167,5 +167,35 @@ describe('CustomerService', () => {
       
       expect(req.request.method).toEqual('GET');
       req.flush(null, { status: 204, statusText: 'Not Found' });
+  })
+
+  it('update() should return status code 204 and response body is null', ()=>{
+    let testCustomer=MockCustomer[0]
+    service.update(testCustomer).subscribe((response) => {
+      expect(response.status).toBe(204)
+      let responseBody = response.body==null?null:response.body;
+      expect(responseBody).toBeNull()
+      
+      });
+
+      const req = httpTestingController.expectOne(`${GlobalConstants.customerBaseAPIUrl}/${testCustomer.id}`);
+      
+      expect(req.request.method).toEqual('PUT');
+      req.flush(null, { status: 204, statusText: 'No Content' });
+  })
+  xit('update() should return status code 400 and response body is null', ()=>{
+    let testCustomer=EmptyCustomer
+    testCustomer.id =1
+    service.update(testCustomer).subscribe((response) => {
+      expect(response.status).toBe(304)
+      let responseBody = response.body==null?null:response.body;
+      expect(responseBody).toBeNull()
+      
+      });
+
+      const req = httpTestingController.expectOne(`${GlobalConstants.customerBaseAPIUrl}/${testCustomer.id}`);
+      
+      expect(req.request.method).toEqual('PUT');
+      req.flush(null, { status: 304, statusText: 'Bad Request' });
   })
 });
