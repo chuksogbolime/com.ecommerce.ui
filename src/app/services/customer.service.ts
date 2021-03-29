@@ -32,4 +32,9 @@ export class CustomerService {
     return this.http.get<Customer>(url,{observe: 'response' })
   }
 
+  update(customer:Customer):Observable<HttpResponse<any>>{
+    let url = `${GlobalConstants.customerBaseAPIUrl}/${customer.id}`;
+    return this.http.put<any>(url,customer, {observe: 'response' })
+  }
+
 }
