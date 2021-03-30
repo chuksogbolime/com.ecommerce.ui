@@ -2,7 +2,9 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.2.
 
-The aim of this project is to demonstrate simple CRUD functionality in Angular, it call an external REST Api for backend service. It also show comprehensive testing of each lines, branches and functions, producing a code coverage of 100% (refer to unit test section).
+The aim of this project is to demonstrate simple CRUD functionality in Angular, it calls an external REST Api for backend service. It also show comprehensive testing of each lines, branches and functions, producing a code coverage of 100% (refer to unit test section).
+
+Backend Api service is hosted in the git repo; `https://github.com/chuksogbolime/com.ecommerce.customer.git`
 
 ## Development server
 
